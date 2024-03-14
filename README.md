@@ -1,6 +1,10 @@
-Hallo Im trying to experiment with Screen Capture and YOLOv8. 
+Hallo bro gw lagi coba buat program dengan YOLOv8
 
-The goals is to detect half of my desktop screen without think what files
-need to be input, just place whatever on your left screen and it will detect.
-Im noticing this app need time to display the image that has been annotated,
-because i think it's taking 0,1 sec to save and display.
+Goal nya disini gw coba buat aplikasi yang bisa mendeteksi setengah dari layar monitor, dan bisa beradaptasi ke resolusi layar monitor.
+Ukuran baru yang jadi tantangan : 1920 x 1080 < masih bug untuk ukuran ini tapi yang kebawahnya masih bisa. 
+
+window tkinter resize : False 
+
+Aplikasi ini sebenernya bisa diubah untuk mendeteksi apapun tergantung last.pt kalian... 
+
+last.pt ada di appneed/
