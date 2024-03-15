@@ -11,6 +11,8 @@ multiprocessing.freeze_support()
 
 wdw = Tk()
 run = False
+sharpenOn = False
+nightVis = False
 
 timedata = time.strftime("%Y%m%d-%H%M%S")
 infostatus = "IDLE"
@@ -19,6 +21,14 @@ wdw.title(".:: FinApp ::.")
 wdw.wm_iconbitmap("appneed/assets/appicon.ico")
 screen_width = wdw.winfo_screenwidth()
 screen_height = wdw.winfo_screenheight()
+w = screen_width/2
+h = screen_height
+x = w-10
+y = 0
+hl = screen_height/1.5
+w = int(w)
+h = int(h)
+hl = int(hl)
 
 # --
 sct = mss()
@@ -26,26 +36,16 @@ sct = mss()
 # --
 model = YOLO('appneed/last.pt')
 
-w = screen_width/2
-h = screen_height
-x = w-10
-y = 0
-hl = screen_height/1.5
 wdw.geometry("%dx%d+%d+%d" % (w, h, x, y))
 wdw['background'] = '#353a61'
 
-w = int(w)
-h = int(h)
-hl = int(hl)
-desc = 'Screen Capture App with YOLOv8 \n  tkinter, ultralystic, cv2, numpy, mss, PIL'
 
-sharpenOn = False
-nightVis = False
+desc = 'Screen Capture App with YOLOv8 \n  tkinter, ultralystic, cv2, numpy, mss, PIL'
 
 
 def detect():
     if run:
-        global nightimg, sharpenimg, statusUpdate, updateImg
+        global statusUpdate, updateImg
         # -- 
         monitor = {'top': 0, 'left': 0, 'width': w, 'height': h}
         img = Image.frombytes("RGB", (w, h), sct.grab(monitor).rgb)
@@ -58,10 +58,6 @@ def detect():
             result = model(screen)
             annotated_frame = result[0].plot()
             data = Image.fromarray(annotated_frame)
-            data.save('appneed/dat/result.png')
-
-            updateImg = ImageTk.PhotoImage(Image.open('appneed/dat/result.png'))
-            label.config(image=updateImg)
 
         elif sharpenOn is False and nightVis is True:
             statusUpdate = "NIGHTVISION NORMAL"
@@ -71,10 +67,6 @@ def detect():
             result = model(screen)
             annotated_frame = result[0].plot()
             data = Image.fromarray(annotated_frame)
-            data.save('appneed/dat/result.png')
-
-            nightimg = ImageTk.PhotoImage(Image.open('appneed/dat/result.png'))
-            label.config(image=nightimg)
 
         elif sharpenOn is True and nightVis is False:
             statusUpdate = "DETECTING : SHARPEN"
@@ -86,10 +78,6 @@ def detect():
             result = model(sharpened_image)
             annotated_frame = result[0].plot()
             data = Image.fromarray(annotated_frame)
-            data.save('appneed/dat/result.png')
-
-            sharpenimg = ImageTk.PhotoImage(Image.open('appneed/dat/result.png'))
-            label.config(image=sharpenimg)
 
         else:
             statusUpdate = "NIGHTVISION SHARPEN"
@@ -101,10 +89,12 @@ def detect():
             result = model(sharpened_image)
             annotated_frame = result[0].plot()
             data = Image.fromarray(annotated_frame)
-            data.save('appneed/dat/result.png')
 
-            sharpenimg = ImageTk.PhotoImage(Image.open('appneed/dat/result.png'))
-            label.config(image=sharpenimg)
+        data.save('appneed/dat/result.png')
+
+        updateImg = ImageTk.PhotoImage(Image.open('appneed/dat/result.png'))
+        label.config(image=updateImg)
+
     wdw.after(1, detect)  # --
 
 
