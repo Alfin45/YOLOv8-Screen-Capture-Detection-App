@@ -49,6 +49,7 @@ def detect():
         # -- 
         monitor = {'top': 0, 'left': 0, 'width': w, 'height': h}
         img = Image.frombytes("RGB", (w, h), sct.grab(monitor).rgb)
+        kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
 
         if sharpenOn is False and nightVis is False:
             statusUpdate = "DETECTING : NORMAL"
@@ -63,9 +64,9 @@ def detect():
             statusUpdate = "NIGHTVISION NORMAL"
             labelInfo.config(text=f"{statusUpdate}")
 
-            screen = cv2.cvtColor(np.array(img), cv2.COLOR_BGR2HLS)
+            screen = np.array(img)
             result = model(screen)
-            annotated_frame = result[0].plot()
+            annotated_frame = cv2.cvtColor(result[0].plot(), cv2.COLOR_BGR2HLS)
             data = Image.fromarray(annotated_frame)
 
         elif sharpenOn is True and nightVis is False:
@@ -73,21 +74,19 @@ def detect():
             labelInfo.config(text=statusUpdate)
 
             screen = np.array(img)
-            kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
-            sharpened_image = cv2.filter2D(screen, -1, kernel*1.5)
-            result = model(sharpened_image)
-            annotated_frame = result[0].plot()
+            result = model(screen)
+            annotated = result[0].plot()
+            annotated_frame = cv2.filter2D(annotated, -1, kernel*1.5)
             data = Image.fromarray(annotated_frame)
 
         else:
             statusUpdate = "NIGHTVISION SHARPEN"
             labelInfo.config(text=statusUpdate)
 
-            screen = cv2.cvtColor(np.array(img), cv2.COLOR_BGR2HLS)
-            kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
-            sharpened_image = cv2.filter2D(screen, -1, kernel*1.5)
-            result = model(sharpened_image)
-            annotated_frame = result[0].plot()
+            screen = np.array(img)
+            result = model(screen)
+            annotated = cv2.cvtColor(result[0].plot(), cv2.COLOR_BGR2HLS)
+            annotated_frame = cv2.filter2D(annotated, -1, kernel*1.5)
             data = Image.fromarray(annotated_frame)
 
         data.save('appneed/dat/result.png')
