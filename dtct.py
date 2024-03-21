@@ -46,7 +46,7 @@ desc = 'Screen Capture App with YOLOv8 \n  tkinter, ultralystic, cv2, numpy, mss
 def detect():
     if run:
         global statusUpdate, updateImg
-        # -- 
+        # --
         monitor = {'top': 0, 'left': 0, 'width': w, 'height': h}
         img = Image.frombytes("RGB", (w, h), sct.grab(monitor).rgb)
         kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
@@ -93,8 +93,7 @@ def detect():
 
         updateImg = ImageTk.PhotoImage(Image.open('appneed/dat/result.png'))
         label.config(image=updateImg)
-
-    wdw.after(1, detect)  # --
+        wdw.after(1, detect)
 
 
 def start():
@@ -107,6 +106,7 @@ def start():
     btnSharpened["state"] = "active"
     startbtn["state"] = "disabled"
     btnNight["state"] = "active"
+    wdw.after(1, detect)
 
 
 def stop():
@@ -328,5 +328,5 @@ btnNight["state"] = "disabled"
 
 wdw.resizable(False, False)
 
-wdw.after(1, detect())
+
 wdw.mainloop()
