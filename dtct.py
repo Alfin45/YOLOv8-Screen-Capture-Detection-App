@@ -1,9 +1,9 @@
 import multiprocessing
 from ultralytics import YOLO
 from tkinter import *
-import time
 import numpy as np
 import cv2
+import os.path
 from mss import mss
 from PIL import Image, ImageTk
 multiprocessing.freeze_support()
@@ -14,7 +14,6 @@ run = False
 sharpenOn = False
 nightVis = False
 
-timedata = time.strftime("%Y%m%d-%H%M%S")
 infostatus = "IDLE"
 
 wdw.title(".:: FinApp ::.")
@@ -29,6 +28,7 @@ hl = screen_height/1.5
 w = int(w)
 h = int(h)
 hl = int(hl)
+datCount = 0
 
 # --
 sct = mss()
@@ -45,7 +45,7 @@ desc = 'Screen Capture App with YOLOv8 \n  tkinter, ultralystic, cv2, numpy, mss
 
 def detect():
     if run:
-        global statusUpdate, updateImg
+        global statusUpdate, updateImg, data
         # --
         monitor = {'top': 0, 'left': 0, 'width': w, 'height': h}
         img = Image.frombytes("RGB", (w, h), sct.grab(monitor).rgb)
@@ -89,9 +89,7 @@ def detect():
             annotated_frame = cv2.filter2D(annotated, -1, kernel*1.5)
             data = Image.fromarray(annotated_frame)
 
-        data.save('appneed/dat/result.png')
-
-        updateImg = ImageTk.PhotoImage(Image.open('appneed/dat/result.png'))
+        updateImg = ImageTk.PhotoImage(data)
         label.config(image=updateImg)
         wdw.after(1, detect)
 
@@ -154,12 +152,16 @@ def nightvision():
 
 
 def saveimg():
-    global run, statusUpdate
+    global run, statusUpdate, datCount
     run = False
-    saverimg = Image.open('appneed/dat/result.png')
-    saverimg.save(f'appneed/result/{timedata}.png')
-    statusUpdate = f"SAVED:appneed/result/{timedata}.png"
-    labelInfo.config(text=statusUpdate)
+    datCount = datCount + 1
+    path = f'appneed/result/{datCount}.png'
+    if os.path.isfile(path):
+        wdw.after(1, saveimg)
+    else:
+        data.save(f'appneed/result/{datCount}.png')
+        statusUpdate = f"SAVED:appneed/result/{datCount}.png"
+        labelInfo.config(text=statusUpdate)
     stopbtnPause["state"] = "disabled"
     btnSave["state"] = "disabled"
     btnSharpened["state"] = "disabled"
@@ -172,8 +174,6 @@ def quit_tk():
     run = False
     statusUpdate = ".:: GOODBYE ::."
     labelInfo.config(text=statusUpdate)
-    resetimg = Image.open('appneed/dat/start.png')
-    resetimg.save('appneed/dat/result.png')
     startbtn["state"] = "disabled"
     btnDisable["state"] = "disabled"
     stopbtnPause["state"] = "disabled"
@@ -182,7 +182,7 @@ def quit_tk():
     btnStop["state"] = "disabled"
     btnNight["state"] = "disabled"
 
-    updateImg = ImageTk.PhotoImage(Image.open('appneed/dat/result.png'))
+    updateImg = ImageTk.PhotoImage(Image.open('appneed/dat/start.png'))
     label.config(image=updateImg)
     wdw.after(3000, exitprog)
 
@@ -201,7 +201,7 @@ desc_label.pack(pady=7)
 
 
 # --
-im = Image.open('appneed/dat/result.png')
+im = Image.open('appneed/dat/start.png')
 updateImg = ImageTk.PhotoImage(im)
 label = Label(wdw, width=w, height=hl,
               borderwidth=5,
