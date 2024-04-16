@@ -7,4 +7,4 @@ window tkinter resize : False
 
 Aplikasi ini sebenernya bisa diubah untuk mendeteksi apapun tergantung last.pt kalian... 
 
-last.pt ada di appneed/
+last.pt ada di appneed/ (hasil latihan untuk mendeteksi helm, sarung tangan, dan jacket pada pengendara roda dua)
