@@ -19,6 +19,11 @@ pada bagian kiri dengan YOLOv8 dan sebagai bentuk project tugas akhir.
 </pre>
 
 
+## PREVIEW PROGRAM
+![example](https://github.com/Alfin45/YOLOv8-Screen-Capture-Detection-App/assets/161688299/ae685e4f-62bb-43a9-800c-5ad2733938c1)
+
+
+
 
 
 
