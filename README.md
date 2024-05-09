@@ -1,10 +1,23 @@
-Hallo bro gw lagi coba buat program dengan YOLOv8
+![Bannergithub](https://github.com/Alfin45/YOLOv8-Screen-Capture-Detection-App/assets/161688299/19e54aff-58d1-4c1d-b7c3-cc98c38121a2)
 
-Goal nya disini gw coba buat aplikasi yang bisa mendeteksi setengah dari layar monitor, dan bisa beradaptasi ke resolusi layar monitor.
-Ukuran baru yang jadi tantangan : 1920 x 1080 < masih bug untuk ukuran ini tapi yang kebawahnya masih bisa. 
 
-window tkinter resize : False 
+## TENTANG PROGRAM
 
-Aplikasi ini sebenernya bisa diubah untuk mendeteksi apapun tergantung last.pt kalian... 
+<pre>
+Program ini dibuat dengan tujuan mendeteksi apapun yang ada di dalam layar monitor 
+pada bagian kiri dengan YOLOv8 dan sebagai bentuk project tugas akhir.
+</pre>
 
-last.pt ada di appneed/ (hasil latihan untuk mendeteksi helm, sarung tangan, dan jacket pada pengendara roda dua)
+
+![Bannergithub2](https://github.com/Alfin45/YOLOv8-Screen-Capture-Detection-App/assets/161688299/55d60f0f-eb6a-475e-ab4a-57a28593dcde)
+
+## TRAINING MODEL
+<pre>
+  Pada repo ini masih menggunakan training model untuk mendeteksi no helmet, no gloves, dan no jacket
+  Note:
+  custom training model(appneed/last.pt) yang digunakan dalam mendeteksi masih kecil precision, recall, 
+  mAP50 dan mAP50-95 dikarnakan ini hanya dataset contoh untuk membuat program berjalan.
+</pre>
+
+
+
