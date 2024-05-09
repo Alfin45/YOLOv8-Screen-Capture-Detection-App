@@ -15,7 +15,7 @@ pada bagian kiri dengan YOLOv8 dan sebagai bentuk project tugas akhir.
   Note:
   custom training model(appneed/last.pt) yang digunakan dalam mendeteksi masih kecil precision, recall, 
   mAP50 dan mAP50-95 dikarnakan ini hanya dataset contoh untuk membuat program berjalan.
-  Display orientation harus kurang dari 1920 x 1080.
+  Display orientation harus kurang dari 1920 x 1080.(Rekomendasi 1600 x 900) 
 </pre>
 
 
