@@ -4,6 +4,12 @@
 <pre>
 Program ini dibuat dengan tujuan mendeteksi apapun yang ada di dalam layar monitor 
 pada bagian kiri dengan YOLOv8 dan sebagai bentuk project tugas akhir.
+  Fitur : 
+  1. Detect(Play/Pause)
+  2. Sharpen
+  3. Ganti HSL
+  4. Save di dalam folder appneed/result/
+  5. Disable Screen(Idle)
 </pre>
 
 
