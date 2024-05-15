@@ -10,6 +10,7 @@ pada bagian kiri dengan YOLOv8 dan sebagai bentuk project tugas akhir.
   3. Ganti HSL
   4. Save di dalam folder appneed/result/
   5. Disable Screen(Idle)
+  6. Konfigurasi IoU, Conf, dan imgsz
 </pre>
 
 
@@ -25,8 +26,9 @@ pada bagian kiri dengan YOLOv8 dan sebagai bentuk project tugas akhir.
 </pre>
 
 
+
 ## PREVIEW PROGRAM
-![example](https://github.com/Alfin45/YOLOv8-Screen-Capture-Detection-App/assets/161688299/ae685e4f-62bb-43a9-800c-5ad2733938c1)
+![previewProgram](https://github.com/Alfin45/YOLOv8-Screen-Capture-Detection-App/assets/161688299/f956cb1b-0abf-4d12-a619-8d551e9bda87)
 ![ExampleProgram-1715350648867](https://github.com/Alfin45/YOLOv8-Screen-Capture-Detection-App/assets/161688299/2a8bf745-f500-479b-b943-82fda4e581ba)
 
 
