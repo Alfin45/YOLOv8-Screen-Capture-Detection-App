@@ -13,6 +13,9 @@ wdw = Tk()
 run = False
 sharpenOn = False
 nightVis = False
+acudef = 640
+confdef = 25/100
+ioudef = 70/100
 
 infostatus = "IDLE"
 
@@ -22,7 +25,7 @@ screen_width = wdw.winfo_screenwidth()
 screen_height = wdw.winfo_screenheight()
 w = screen_width/2
 h = screen_height
-x = w-10
+x = w-5
 y = 0
 hl = screen_height/1.5
 w = int(w)
@@ -56,7 +59,7 @@ def detect():
             labelInfo.config(text=f"{statusUpdate}")
 
             screen = np.array(img)
-            result = model(screen)
+            result = model(screen, iou=ioudef, conf=confdef, imgsz=acudef)
             annotated_frame = result[0].plot()
             data = Image.fromarray(annotated_frame)
 
@@ -65,7 +68,7 @@ def detect():
             labelInfo.config(text=f"{statusUpdate}")
 
             screen = np.array(img)
-            result = model(screen)
+            result = model(screen, iou=ioudef, conf=confdef, imgsz=acudef)
             annotated_frame = cv2.cvtColor(result[0].plot(), cv2.COLOR_BGR2HLS)
             data = Image.fromarray(annotated_frame)
 
@@ -74,7 +77,7 @@ def detect():
             labelInfo.config(text=statusUpdate)
 
             screen = np.array(img)
-            result = model(screen)
+            result = model(screen, iou=ioudef, conf=confdef, imgsz=acudef)
             annotated = result[0].plot()
             annotated_frame = cv2.filter2D(annotated, -1, kernel*1.5)
             data = Image.fromarray(annotated_frame)
@@ -84,7 +87,7 @@ def detect():
             labelInfo.config(text=statusUpdate)
 
             screen = np.array(img)
-            result = model(screen)
+            result = model(screen, iou=ioudef, conf=confdef, imgsz=acudef)
             annotated = cv2.cvtColor(result[0].plot(), cv2.COLOR_BGR2HLS)
             annotated_frame = cv2.filter2D(annotated, -1, kernel*1.5)
             data = Image.fromarray(annotated_frame)
@@ -169,6 +172,56 @@ def saveimg():
     btnNight["state"] = "disabled"
 
 
+def update_model():
+    global run, acudef, confdef, ioudef, statusUpdate
+    run = False
+    statusUpdate = "MODEL CONFIG : UPDATED"
+    labelInfo.config(text=f"{statusUpdate}")
+    upacu = int(acu.get())
+    upconf = int(conf.get())
+    upiou = int(iou.get())
+
+    if 1 <= upacu <= 25:
+        acudef = 640
+    elif 26 <= upacu <= 50:
+        acudef = 736
+    elif 51 <= upacu <= 75:
+        acudef = 800
+    else:
+        acudef = 960
+
+    confdef = upconf / 100
+    ioudef = upiou / 100
+
+    btnDisable["state"] = "active"
+    stopbtnPause["state"] = "disabled"
+    btnSave["state"] = "active"
+    startbtn["state"] = "active"
+    btnSharpened["state"] = "disabled"
+    btnNight["state"] = "disabled"
+
+
+def reset_model():
+    global run, acudef, confdef, ioudef, statusUpdate
+    run = False
+    statusUpdate = "MODEL CONFIG : RESET"
+    labelInfo.config(text=f"{statusUpdate}")
+    acudef = 640
+    confdef = 25 / 100
+    ioudef = 70 / 100
+
+    sliderAcu.set(1)
+    sliderIoU.set(70)
+    sliderConf.set(25)
+
+    btnDisable["state"] = "active"
+    stopbtnPause["state"] = "disabled"
+    btnSave["state"] = "active"
+    startbtn["state"] = "active"
+    btnSharpened["state"] = "disabled"
+    btnNight["state"] = "disabled"
+
+
 def quit_tk():
     global statusUpdate, updateImg, run
     run = False
@@ -181,6 +234,8 @@ def quit_tk():
     btnSave["state"] = "disabled"
     btnStop["state"] = "disabled"
     btnNight["state"] = "disabled"
+    btnUp["state"] = "disabled"
+    btnRes["state"] = "disabled"
 
     updateImg = ImageTk.PhotoImage(Image.open('appneed/dat/start.png'))
     label.config(image=updateImg)
@@ -197,7 +252,7 @@ desc_label = Label(wdw, background='#353a61',
                    font='System 18 bold',
                    fg='#8f9cff',
                    text=desc)
-desc_label.pack(pady=7)
+desc_label.pack(pady=2)
 
 
 # --
@@ -209,6 +264,13 @@ label = Label(wdw, width=w, height=hl,
               image=updateImg)
 label.pack()
 
+# --
+frameFirst = Frame(wdw, bg='#353a61')
+frameFirst.pack(expand=False, anchor="nw")
+
+# --
+frameSecond = Frame(wdw, bg='#353a61', highlightbackground="white", highlightthickness=1)
+frameSecond.pack(expand=False, anchor="nw")
 
 # --
 imgBtnStart = Image.open('appneed/assets/play.png')
@@ -217,11 +279,11 @@ click_btnStart = ImageTk.PhotoImage(resize_imageStart)
 
 
 # --
-startbtn = Button(wdw, borderwidth=0, width=50, height=50,
+startbtn = Button(frameFirst, borderwidth=0, width=50, height=50,
                   image=click_btnStart, background='#353a61',
                   activebackground='#353a61',
                   command=start)
-startbtn.pack(anchor='nw', pady=25, padx=2, side=LEFT)
+startbtn.pack(pady=2, padx=2, side=LEFT)
 
 
 # --
@@ -231,11 +293,11 @@ click_btnPause = ImageTk.PhotoImage(resize_imagePause)
 
 
 # --
-stopbtnPause = Button(wdw, borderwidth=0, width=50, height=50,
+stopbtnPause = Button(frameFirst, borderwidth=0, width=50, height=50,
                       image=click_btnPause, background='#353a61',
                       activebackground='#353a61',
                       command=stop)
-stopbtnPause.pack(anchor='nw', pady=25, padx=2, side=LEFT)
+stopbtnPause.pack(pady=2, padx=2, side=LEFT)
 
 
 # --
@@ -244,11 +306,11 @@ resize_imageDisable = imgBtnDisable.resize((50, 50))
 click_btnDisable = ImageTk.PhotoImage(resize_imageDisable)
 
 # --
-btnDisable = Button(wdw, borderwidth=0, width=50, height=50,
+btnDisable = Button(frameFirst, borderwidth=0, width=50, height=50,
                     image=click_btnDisable, background='#353a61',
                     activebackground='#353a61',
                     command=disable)
-btnDisable.pack(anchor='nw', pady=25, padx=2, side=LEFT)
+btnDisable.pack(pady=2, padx=2, side=LEFT)
 
 
 # --
@@ -258,11 +320,11 @@ click_btnSharpened = ImageTk.PhotoImage(resize_imageSharpened)
 
 
 # --
-btnSharpened = Button(wdw, borderwidth=0, width=50, height=50,
+btnSharpened = Button(frameFirst, borderwidth=0, width=50, height=50,
                       image=click_btnSharpened,
                       background='#353a61', activebackground='#353a61',
                       command=sharpenedimg)
-btnSharpened.pack(anchor='nw', pady=25, padx=2, side=LEFT)
+btnSharpened.pack(pady=2, padx=2, side=LEFT)
 
 
 # --
@@ -272,11 +334,11 @@ click_btnNight = ImageTk.PhotoImage(resize_imageNight)
 
 
 # --
-btnNight = Button(wdw, borderwidth=0, width=50, height=50,
+btnNight = Button(frameFirst, borderwidth=0, width=50, height=50,
                   image=click_btnNight, background='#353a61',
                   activebackground='#353a61',
                   command=nightvision)
-btnNight.pack(anchor='nw', pady=25, padx=2, side=LEFT)
+btnNight.pack(pady=2, padx=2, side=LEFT)
 
 
 # --
@@ -286,11 +348,11 @@ click_btnSave = ImageTk.PhotoImage(resize_imageSave)
 
 
 # --
-btnSave = Button(wdw, borderwidth=0, width=50, height=50,
+btnSave = Button(frameFirst, borderwidth=0, width=50, height=50,
                  image=click_btnSave, background='#353a61',
                  activebackground='#353a61',
                  command=saveimg)
-btnSave.pack(anchor='nw', pady=25, padx=2, side=LEFT)
+btnSave.pack(pady=2, padx=2, side=LEFT)
 
 
 # --
@@ -300,22 +362,72 @@ click_btnStop = ImageTk.PhotoImage(resize_imageStop)
 
 
 # --
-btnStop = Button(wdw, borderwidth=0, width=50, height=50,
+btnStop = Button(frameFirst, borderwidth=0, width=50, height=50,
                  image=click_btnStop, background='#353a61',
                  activebackground='#353a61',
                  command=quit_tk)
-btnStop.pack(anchor='nw', pady=25, padx=2, side=LEFT)
+btnStop.pack(pady=2, padx=2, side=LEFT)
 
-
-labelInfo = Label(wdw, text=f"{infostatus}",
+labelInfo = Label(frameFirst, text=f"{infostatus}",
                   background='#000000',
                   fg='#8f9cff',
                   font='System 10 bold',
-                  width=70, height=2,
+                  width=50, height=2,
                   borderwidth=5,
                   relief="sunken"
                   )
-labelInfo.pack(anchor='nw', pady=25, padx=2, side=LEFT)
+labelInfo.pack(pady=2, padx=2, side=LEFT)
+
+
+acu = IntVar()
+sliderAcu = Scale(frameSecond, from_=1, to=100,
+                  orient=HORIZONTAL, label="Accuracy",
+                  bg='#353a61', font='System 10 bold',
+                  fg='White', length=150, variable=acu)
+sliderAcu.set(1)
+sliderAcu.pack(pady=2, padx=2, side=LEFT)
+
+
+conf = IntVar()
+sliderConf = Scale(frameSecond, from_=1, to=80,
+                   orient=HORIZONTAL, label="Confidence",
+                   bg='#353a61', font='System 10 bold',
+                   fg='White', length=150, variable=conf)
+sliderConf.set(25)
+sliderConf.pack(pady=2, padx=2, side=LEFT)
+
+
+iou = IntVar()
+sliderIoU = Scale(frameSecond, from_=1, to=100,
+                  orient=HORIZONTAL, label="IoU",
+                  bg='#353a61', font='System 10 bold',
+                  fg='White', length=150, variable=iou)
+sliderIoU.set(70)
+sliderIoU.pack(pady=2, padx=2, side=LEFT)
+
+
+imgBtnUp = Image.open('appneed/assets/dang.png')
+resize_imageUp = imgBtnUp.resize((50, 50))
+click_btnUp = ImageTk.PhotoImage(resize_imageUp)
+
+
+btnUp = Button(frameSecond, borderwidth=0, width=50, height=50,
+               image=click_btnUp, background='#353a61',
+               activebackground='#353a61',
+               command=update_model)
+btnUp.pack(pady=2, padx=2, side=LEFT)
+
+
+imgBtnRes = Image.open('appneed/assets/reset.png')
+resize_imageRes = imgBtnRes.resize((50, 50))
+click_btnRes = ImageTk.PhotoImage(resize_imageRes)
+
+
+btnRes = Button(frameSecond, borderwidth=0, width=50, height=50,
+                image=click_btnRes, background='#353a61',
+                activebackground='#353a61',
+                command=reset_model)
+btnRes.pack(pady=2, padx=2, side=LEFT)
 
 
 startbtn["state"] = "active"
