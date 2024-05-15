@@ -11,6 +11,11 @@ pada bagian kiri dengan YOLOv8 dan sebagai bentuk project tugas akhir.
   4. Save di dalam folder appneed/result/
   5. Disable Screen(Idle)
   6. Konfigurasi IoU, Conf, dan imgsz
+
+  Note : Accuracy 4 level : level 1 (1-25) <- default:640
+                            level 2 (26-50) <- 736
+                            level 3 (51-75) <- 800
+                            level 4 (76-100) <- 960
 </pre>
 
 
@@ -29,7 +34,7 @@ pada bagian kiri dengan YOLOv8 dan sebagai bentuk project tugas akhir.
 
 ## PREVIEW PROGRAM
 ![previewProgram](https://github.com/Alfin45/YOLOv8-Screen-Capture-Detection-App/assets/161688299/f956cb1b-0abf-4d12-a619-8d551e9bda87)
-![PreviewVid (online-video-cutter com)](https://github.com/Alfin45/YOLOv8-Screen-Capture-Detection-App/assets/161688299/d59f077a-1a7d-4ebe-ad58-ba83cdf88cf9)
+![PreviewVid (online-video-cutter com) (1)](https://github.com/Alfin45/YOLOv8-Screen-Capture-Detection-App/assets/161688299/f174a89f-c908-4583-9daf-3e7f6a743b37)
 
 
 
