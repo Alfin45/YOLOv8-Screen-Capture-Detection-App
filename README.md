@@ -33,6 +33,7 @@ pada bagian kiri dengan YOLOv8 dan sebagai bentuk project tugas akhir.
 
 
 ## PREVIEW PROGRAM
+![startprog](https://github.com/Alfin45/YOLOv8-Screen-Capture-Detection-App/assets/161688299/ad224eb2-91c7-4d9b-9a6d-2079cb537cb0)
 ![previewProgram](https://github.com/Alfin45/YOLOv8-Screen-Capture-Detection-App/assets/161688299/f956cb1b-0abf-4d12-a619-8d551e9bda87)
 ![PreviewVid (online-video-cutter com) (1)](https://github.com/Alfin45/YOLOv8-Screen-Capture-Detection-App/assets/161688299/f174a89f-c908-4583-9daf-3e7f6a743b37)
 
