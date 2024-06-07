@@ -141,6 +141,10 @@ def detect():
         img = Image.frombytes("RGB", (w, h), sct.grab(monitor).rgb)
         kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
 
+        # Can change the image(convert or filter) before bring up image data to YOLOv8 plotting.
+        # But this change gonna effect on detection.
+        # Im not using that thing, because my datasets it's only RGB Images.
+
         if sharpenOn is False and nightVis is False:
             statusUpdate = "DETECTING : NORMAL"
             listwidget[7].config(text=f"{statusUpdate}")
