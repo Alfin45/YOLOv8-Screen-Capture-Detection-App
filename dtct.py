@@ -306,10 +306,9 @@ def quit_tk():
     statusUpdate = ".:: GOODBYE ::."
     listwidget[7].config(text=statusUpdate)
     for quitstate in range(7):
-        for quitstate2 in range(11, 13):
-            listwidget[quitstate2]["state"] = "disabled"
         listwidget[quitstate]["state"] = "disabled"
-
+    for quitstate2 in range(11, 13):
+        listwidget[quitstate2]["state"] = "disabled"
     updateImg = ImageTk.PhotoImage(Image.open('appneed/dat/start.png'))
     label.config(image=updateImg)
     wdw.after(3000, exitprog)
