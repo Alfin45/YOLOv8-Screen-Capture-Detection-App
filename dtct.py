@@ -17,6 +17,7 @@ acudef = 640
 confdef = 25 / 100
 ioudef = 70 / 100
 
+
 infostatus = "IDLE"
 wdw.title(".:: FinApp ::.")
 wdw.wm_iconbitmap("appneed/assets/appicon.ico")
@@ -135,48 +136,61 @@ def destroysplash():
 # --
 def detect():
     if run:
-        global statusUpdate, updateImg, data
-        # --
+        global statusUpdate, updateImg, data, img
+        # Kekuatan pendeteksian dari program ini hanya 50% dikarnakan size dari video atau foto
+        # yang menjadi target akan berkurang sesuai dengan half-screen, jika ingin di kembangkan
+        # tanpa mengorbankan kecepatan. bytes yang diterima harus dari dual monitor sehingga
+        # saat memasuki image size bytes yang dikirimkan panjang dan lebar.
         monitor = {'top': 0, 'left': 0, 'width': w, 'height': h}
-        img = Image.frombytes("RGB", (w, h), sct.grab(monitor).rgb)
-        kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
+        img = sct.grab(monitor)
 
-        # Can change the image(convert or filter) before bring up image data to YOLOv8 plotting.
-        # But this change gonna effect on detection.
-        # Im not using that thing, because my datasets it's only RGB Images.
+        kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
 
         if sharpenOn is False and nightVis is False:
             statusUpdate = "DETECTING : NORMAL"
             listwidget[7].config(text=f"{statusUpdate}")
-            screen = np.array(img)
+            screens = np.array(img)
+            screen = cv2.cvtColor(screens, cv2.COLOR_BGRA2BGR)
+
             result = model(screen, iou=ioudef, conf=confdef, imgsz=acudef)
             annotated_frame = result[0].plot()
+            annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
             data = Image.fromarray(annotated_frame)
 
         elif sharpenOn is False and nightVis is True:
             statusUpdate = "NIGHTVISION NORMAL"
             listwidget[7].config(text=f"{statusUpdate}")
-            screen = np.array(img)
+            screens = np.array(img)
+            screen = cv2.cvtColor(screens, cv2.COLOR_BGRA2BGR)
+
             result = model(screen, iou=ioudef, conf=confdef, imgsz=acudef)
-            annotated_frame = cv2.cvtColor(result[0].plot(), cv2.COLOR_BGR2HLS)
+            annotated_frame = cv2.cvtColor(result[0].plot(), cv2.COLOR_BGR2RGB)
+            annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_RGB2HLS)
             data = Image.fromarray(annotated_frame)
 
         elif sharpenOn is True and nightVis is False:
             statusUpdate = "DETECTING : SHARPEN"
             listwidget[7].config(text=statusUpdate)
-            screen = np.array(img)
+            screens = np.array(img)
+            screen = cv2.cvtColor(screens, cv2.COLOR_BGRA2BGR)
+
             result = model(screen, iou=ioudef, conf=confdef, imgsz=acudef)
             annotated = result[0].plot()
             annotated_frame = cv2.filter2D(annotated, -1, kernel * 1.5)
+            annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
             data = Image.fromarray(annotated_frame)
 
         else:
             statusUpdate = "NIGHTVISION SHARPEN"
             listwidget[7].config(text=statusUpdate)
-            screen = np.array(img)
+            screens = np.array(img)
+            screen = cv2.cvtColor(screens, cv2.COLOR_BGRA2BGR)
+
             result = model(screen, iou=ioudef, conf=confdef, imgsz=acudef)
-            annotated = cv2.cvtColor(result[0].plot(), cv2.COLOR_BGR2HLS)
+            annotated = cv2.cvtColor(result[0].plot(), cv2.COLOR_BGR2RGB)
             annotated_frame = cv2.filter2D(annotated, -1, kernel * 1.5)
+            annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_RGB2HLS)
+
             data = Image.fromarray(annotated_frame)
 
         updateImg = ImageTk.PhotoImage(data)
@@ -306,9 +320,10 @@ def quit_tk():
     statusUpdate = ".:: GOODBYE ::."
     listwidget[7].config(text=statusUpdate)
     for quitstate in range(7):
+        for quitstate2 in range(11, 13):
+            listwidget[quitstate2]["state"] = "disabled"
         listwidget[quitstate]["state"] = "disabled"
-    for quitstate2 in range(11, 13):
-        listwidget[quitstate2]["state"] = "disabled"
+
     updateImg = ImageTk.PhotoImage(Image.open('appneed/dat/start.png'))
     label.config(image=updateImg)
     wdw.after(3000, exitprog)
@@ -326,7 +341,7 @@ desc_label.pack(pady=2)
 im = Image.open('appneed/dat/start.png')
 updateImg = ImageTk.PhotoImage(im)
 label = Label(wdw, width=w, height=hl, borderwidth=5,
-              relief="sunken", image=updateImg)
+              relief="sunken", image=updateImg, background="black")
 label.pack()
 # Frames
 frameFirst = Frame(wdw, bg='#353a61')
