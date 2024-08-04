@@ -41,7 +41,7 @@ model = YOLO('appneed/last.pt')
 
 # Window
 wdw.state('zoomed')
-# wdw.geometry("%dx%d+%d+%d" % (screen_width+2, screen_height-50, -10, -10))
+wdw.geometry("%dx%d+%d+%d" % (screen_width+2, screen_height-50, -10, -10))
 wdw['background'] = '#353a61'
 desc = 'Screen Capture App with YOLOv8 \n  tkinter, ultralystic, cv2, numpy, mss, PIL'
 imagelocation = ["appneed/assets/play.png",
@@ -63,7 +63,7 @@ datasetimgsz=960
 
 
 # 2nd monitor
-monitor_number = 1
+monitor_number = 2
 mon = sct.monitors[monitor_number]
 
 
@@ -152,7 +152,7 @@ def detect():
         # saat memasuki image size bytes yang dikirimkan panjang dan lebar.
         # monitor = {'top': 100, 'left': 100, 'width': 640, 'height': 640}
         # monitor = {'top': 0, 'left': 0, 'width': w, 'height': h}
-        monitor = {'top': mon["top"] + 0, 'left': mon["left"] + 0, 'width': 1920, 'height': 1080}
+        monitor = {'top': mon["top"] + 0, 'left': mon["left"] + 0, 'width': screen_width, 'height': screen_height}
         # img = Image.frombytes("RGB", (1920, 1080), sct.grab(monitor).rgb) # with this model.predict got wrong result
         img = sct.grab(monitor)
         kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
