@@ -41,7 +41,7 @@ model = YOLO('appneed/last.pt')
 
 # Window
 wdw.state('zoomed')
-wdw.geometry("%dx%d+%d+%d" % (screen_width+2, screen_height-50, -10, -10))
+# wdw.geometry("%dx%d+%d+%d" % (screen_width+2, screen_height-50, -10, -10))
 wdw['background'] = '#353a61'
 desc = 'Screen Capture App with YOLOv8 \n  tkinter, ultralystic, cv2, numpy, mss, PIL'
 imagelocation = ["appneed/assets/play.png",
